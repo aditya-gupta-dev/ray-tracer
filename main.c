@@ -2,23 +2,44 @@
 
 #define RES 60 
 
+typedef struct {
+	int x; 
+	int y; 
+	float r;
+	Color col;  
+} Circle; 
+
+void renderCircle(Circle* cir) { 
+	DrawCircle(cir->x, cir->y, cir->r, cir->col); 
+}
+
 int main() { 
 	InitWindow(RES*16, RES*9, "ray tracer");
 
 	SetTargetFPS(60); 
 
-	int x = (RES*16) / 2; 
-	int y = (RES*9) / 2;
-        float r = 10.0f; 	
+
+	Circle cir = { 
+		.x = (RES*16)/2, 
+	        .y = (RES*9)/2, 
+		.r = 60.0f, 
+		.col = ORANGE 	
+	};
+
 	while(!WindowShouldClose()) { 
 		BeginDrawing();
-	       	DrawCircle(x,y,r,ORANGE);	
-		
+		if(IsMouseButtonDown(0)){ 
+		  Vector2 vec = GetMousePosition();
+		  cir.x = vec.x; 
+	          cir.y = vec.y; 
+		}
+
+		renderCircle(&cir); 
 		ClearBackground(BLACK); 
 		DrawFPS(20, 20); 	
-		EndDrawing(); 
+		EndDrawing();
 
-		r += 15 * GetFrameTime();
+
 	}
 	
 	CloseWindow(); 
